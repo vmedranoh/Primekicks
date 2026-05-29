@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PRIME KICKS — Tienda de Sneakers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f0e8;
+      --cream: #ede8dc;
+      --accent: #e8341c;
+      --accent2: #f5a623;
+      --gray: #888880;
+      --dark-gray: #1a1a1a;
+      --mid-gray: #2e2e2e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Space Grotesk', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; cursor: none; }
+    .cursor { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s ease; mix-blend-mode: difference; }
+    .cursor-follower { width: 36px; height: 36px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.15s ease; opacity: 0.6; }
+    .marquee-bar { background: var(--accent); color: var(--white); font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; overflow: hidden; white-space: nowrap; padding: 10px 0; border-bottom: 2px solid #c01d07; position: relative; z-index: 100; }
+    .marquee-track { display: inline-flex; animation: marquee 28s linear infinite; gap: 0; }
+    .marquee-track span { display: inline-block; padding: 0 3rem; }
+    .marquee-track span::before { content: '★ '; opacity: 0.7; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    nav { position: sticky; top: 0; z-index: 90; background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--mid-gray); padding: 0 3rem; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links li a { display: block; padding: 0 1.4rem; height: 68px; line-height: 68px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.2s; position: relative; }
+    .nav-links li a::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: center; transition: transform 0.25s ease; }
+    .nav-links li a:hover, .nav-links li a.active { color: var(--white); }
+    .nav-links li a:hover::after, .nav-links li a.active::after { transform: scaleX(1); }
+    #inicio { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding: 6rem 3rem 4rem; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(232,52,28,0.12), transparent), radial-gradient(ellipse 50% 80% at 20% 80%, rgba(245,166,35,0.07), transparent); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%); }
+    .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.22em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; animation: fadeUp 0.7s ease both; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 14vw, 13rem); line-height: 0.88; letter-spacing: -0.01em; color: var(--white); animation: fadeUp 0.7s 0.1s ease both; }
+    .hero-title span { color: var(--accent); }
+    .hero-subtitle { margin-top: 2rem; font-size: 1rem; color: var(--gray); max-width: 420px; line-height: 1.7; animation: fadeUp 0.7s 0.2s ease both; }
+    .hero-cta { margin-top: 3rem; display: flex; gap: 1rem; animation: fadeUp 0.7s 0.3s ease both; }
+    .btn-primary { background: var(--accent); color: var(--white); border: none; padding: 1rem 2.5rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s, transform 0.15s; }
+    .btn-primary:hover { background: #c01d07; transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid var(--mid-gray); padding: 1rem 2.5rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.2s, color 0.2s, transform 0.15s; }
+    .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
+    .hero-shoe-display { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); font-size: 14rem; filter: drop-shadow(0 0 80px rgba(232,52,28,0.3)); animation: float 4s ease-in-out infinite, fadeUp 1s 0.4s ease both; pointer-events: none; }
+    @keyframes float { 0%, 100% { transform: translateY(-50%) rotate(-10deg); } 50% { transform: translateY(calc(-50% - 20px)) rotate(-8deg); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    section { padding: 6rem 3rem; border-top: 1px solid var(--mid-gray); }
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 6vw, 5.5rem); line-height: 0.9; letter-spacing: 0.02em; margin-bottom: 3rem; }
+    #quienes { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .about-image-wrapper { position: relative; }
+    .about-image-box { width: 100%; aspect-ratio: 3/4; background: var(--mid-gray); display: flex; align-items: center; justify-content: center; font-size: 6rem; position: relative; overflow: hidden; }
+    .about-image-box::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(232,52,28,0.2), transparent 60%); pointer-events: none; z-index: 1; }
+    .about-image-label { position: absolute; bottom: -1px; left: -1px; background: var(--accent); padding: 0.5rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; z-index: 2; }
+    .about-frame { position: absolute; top: 1rem; left: 1rem; right: -1rem; bottom: -1rem; border: 1.5px solid var(--mid-gray); pointer-events: none; z-index: -1; }
+    .about-text p { color: var(--gray); line-height: 1.8; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--mid-gray); }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-top: 0.3rem; }
+    #mision { background: var(--dark-gray); }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 4rem; }
+    .mv-card { background: var(--black); padding: 3rem; position: relative; overflow: hidden; }
+    .mv-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .mv-card:nth-child(1)::before { background: var(--accent); }
+    .mv-card:nth-child(2)::before { background: var(--accent2); }
+    .mv-card-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+    .mv-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; margin-bottom: 1.5rem; color: var(--white); }
+    .mv-card p { color: var(--gray); line-height: 1.8; font-size: 0.95rem; }
+    .mv-values { margin-top: 4rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .value-pill { border: 1px solid var(--mid-gray); padding: 1.5rem; text-align: center; transition: border-color 0.2s, background 0.2s; }
+    .value-pill:hover { border-color: var(--accent); background: rgba(232,52,28,0.05); }
+    .value-pill .vi { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .value-pill p { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); }
+    .products-filter { display: flex; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .filter-btn { background: transparent; color: var(--gray); border: 1px solid var(--mid-gray); padding: 0.5rem 1.25rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); color: var(--white); border-color: var(--accent); }
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .product-card { background: var(--dark-gray); position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+    .product-card:hover { transform: scale(1.02); z-index: 2; }
+    .product-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: var(--mid-gray); position: relative; overflow: hidden; transition: transform 0.4s; }
+    .product-card:hover .product-img { transform: scale(1.05); }
+    .product-img-bg { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 70%); pointer-events: none; }
+    .product-badge { position: absolute; top: 1rem; left: 1rem; background: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.75rem; z-index: 2; }
+    .product-info { padding: 1.5rem; }
+    .product-brand { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.4rem; }
+    .product-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .product-price { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .product-price-old { font-size: 0.8rem; color: var(--gray); text-decoration: line-through; margin-left: 0.5rem; }
+    .product-add { margin-top: 1rem; width: 100%; background: var(--black); color: var(--white); border: 1px solid var(--mid-gray); padding: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .product-add:hover { background: var(--accent); border-color: var(--accent); }
+    #proveedores { background: var(--dark-gray); }
+    .suppliers-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin-top: 4rem; }
+    .supplier-card { background: var(--black); padding: 2.5rem 1.5rem; text-align: center; transition: background 0.2s; position: relative; overflow: hidden; }
+    .supplier-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transition: transform 0.3s; }
+    .supplier-card:hover { background: var(--mid-gray); }
+    .supplier-card:hover::after { transform: scaleX(1); }
+    .supplier-logo { font-size: 3rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; height: 60px; }
+    .supplier-logo img { width: 60px; height: 60px; object-fit: contain; }
+    .supplier-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .supplier-country { font-size: 0.7rem; color: var(--gray); letter-spacing: 0.1em; text-transform: uppercase; }
+    .clients-intro { color: var(--gray); font-size: 0.95rem; line-height: 1.8; max-width: 600px; margin-bottom: 3rem; }
+    .clients-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    .client-card { background: var(--dark-gray); padding: 2rem 1.5rem; display: flex; align-items: center; gap: 1.25rem; transition: background 0.2s, transform 0.2s; border-left: 3px solid transparent; }
+    .client-card:hover { background: var(--mid-gray); transform: translateX(4px); border-left-color: var(--accent); }
+    .client-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--mid-gray); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; border: 2px solid var(--mid-gray); transition: border-color 0.2s; overflow: hidden; }
+    .client-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .client-card:hover .client-avatar { border-color: var(--accent); }
+    .client-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.2rem; }
+    .client-tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; }
+    #contacto { background: var(--dark-gray); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 4rem; }
+    .contact-info-item { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 2.5rem; }
+    .contact-icon { width: 48px; height: 48px; background: var(--black); border: 1px solid var(--mid-gray); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .contact-info-item h4 { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+    .contact-info-item p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+    .social-links { display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+    .social-btn { width: 48px; height: 48px; background: var(--black); border: 1px solid var(--mid-gray); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; text-decoration: none; transition: all 0.2s; }
+    .social-btn:hover { background: var(--accent); border-color: var(--accent); }
+    .map-container { background: var(--black); border: 1px solid var(--mid-gray); height: 100%; min-height: 400px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .map-header { background: var(--mid-gray); padding: 1rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 0.75rem; }
+    .map-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .map-body { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; font-size: 3rem; color: var(--accent); opacity: 0.5; }
+    .map-body p { font-size: 0.82rem; color: var(--gray); letter-spacing: 0.1em; text-transform: uppercase; }
+    .video-section { border-top: 1px solid var(--mid-gray); padding: 6rem 3rem; text-align: center; }
+    .video-wrapper { max-width: 800px; margin: 0 auto; position: relative; }
+    .video-placeholder { aspect-ratio: 16/9; background: var(--dark-gray); border: 1px solid var(--mid-gray); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; position: relative; overflow: hidden; }
+    .play-btn { width: 80px; height: 80px; border-radius: 50%; background: var(--accent); border: none; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: transform 0.2s, background 0.2s; z-index: 2; }
+    .play-btn:hover { transform: scale(1.1); background: #c01d07; }
+    .carousel-section { border-top: 1px solid var(--mid-gray); padding: 4rem 0; overflow: hidden; }
+    .carousel-track { display: flex; gap: 0; animation: carousel 25s linear infinite; }
+    .carousel-track:hover { animation-play-state: paused; }
+    .carousel-item { min-width: 280px; height: 200px; background: var(--dark-gray); border-right: 1px solid var(--mid-gray); display: flex; align-items: center; justify-content: center; font-size: 4rem; flex-shrink: 0; position: relative; overflow: hidden; }
+    .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+    .carousel-item-label { position: absolute; bottom: 0.75rem; left: 0; right: 0; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); z-index: 2; }
+    @keyframes carousel { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    footer { background: var(--dark-gray); border-top: 1px solid var(--mid-gray); padding: 4rem 3rem 2rem; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+    .footer-brand p { color: var(--gray); font-size: 0.88rem; line-height: 1.7; max-width: 280px; margin-bottom: 2rem; }
+    .footer-col h4 { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.75rem; }
+    .footer-col ul li a { color: var(--gray); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid var(--mid-gray); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-lema { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); }
+    .footer-lema strong { color: var(--accent2); }
+    .footer-copy { font-size: 0.75rem; color: var(--gray); }
+    .music-player { position: fixed; bottom: 2rem; right: 2rem; z-index: 80; display: flex; align-items: center; gap: 1rem; background: rgba(10,10,10,0.95); backdrop-filter: blur(20px); border: 1px solid var(--mid-gray); padding: 0.75rem 1.25rem; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    .music-btn { background: var(--accent); border: none; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; color: white; transition: background 0.2s; }
+    .music-btn:hover { background: #c01d07; }
+    .music-info { flex: 1; min-width: 0; }
+    .music-title { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .music-status { font-size: 0.6rem; color: var(--gray); margin-top: 0.15rem; }
+    .music-bars { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+    .music-bar { width: 3px; background: var(--accent); animation: musicBar 0.8s ease-in-out infinite alternate; }
+    .music-bar:nth-child(2) { animation-delay: 0.15s; }
+    .music-bar:nth-child(3) { animation-delay: 0.3s; }
+    .music-bar:nth-child(4) { animation-delay: 0.1s; }
+    .music-bar.paused { animation-play-state: paused; }
+    @keyframes musicBar { from { height: 3px; } to { height: 16px; } }
+    .scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: transparent; z-index: 999; }
+    .scroll-bar { height: 100%; background: var(--accent); width: 0; transition: width 0.1s; }
+    .text-accent { color: var(--accent); }
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      #quienes { grid-template-columns: 1fr; gap: 3rem; }
+      .mv-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .clients-list { grid-template-columns: 1fr 1fr; }
+      .suppliers-grid { grid-template-columns: repeat(3, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .hero-shoe-display { display: none; }
+      .mv-values { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div>
+<div class="scroll-progress"><div class="scroll-bar" id="scrollBar"></div></div>
+
+<!-- ========================= MARQUEE ========================= -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span>Carnet: 0900-26-25761 — Víctor Manuel Estuardo Medrano Hernández</span>
+    <span>PRIME KICKS — Tienda de Sneakers Premium</span>
+    <span>Carnet: 0900-26-25761 — Víctor Manuel Estuardo Medrano Hernández</span>
+    <span>PRIME KICKS — Tienda de Sneakers Premium</span>
+    <span>Carnet: 0900-26-25761 — Víctor Manuel Estuardo Medrano Hernández</span>
+    <span>PRIME KICKS — Tienda de Sneakers Premium</span>
+    <span>Carnet: 0900-26-25761 — Víctor Manuel Estuardo Medrano Hernández</span>
+    <span>PRIME KICKS — Tienda de Sneakers Premium</span>
+  </div>
+</div>
+
+<!-- ========================= NAV ========================= -->
+<nav>
+  <a href="#inicio" class="nav-logo">PRIME<span>.</span>KICKS</a>
+  <ul class="nav-links">
+    <li><a href="#quienes" class="nav-link">Quiénes Somos</a></li>
+    <li><a href="#mision" class="nav-link">Misión & Visión</a></li>
+    <li><a href="#productos" class="nav-link">Productos</a></li>
+    <li><a href="#proveedores" class="nav-link">Proveedores</a></li>
+    <li><a href="#clientes" class="nav-link">Clientes</a></li>
+    <li><a href="#contacto" class="nav-link">Contáctenos</a></li>
+  </ul>
+</nav>
+
+<!-- ========================= HERO ========================= -->
+<section id="inicio" style="border-top:none;">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Est. 2024 — Guatemala City</div>
+  <div class="hero-title">PRIME<br><span>KICKS</span></div>
+  <p class="hero-subtitle">La tienda de sneakers más exclusiva de Guatemala. Auténticos, limitados, únicos. Tu próximo par te está esperando.</p>
+  <div class="hero-cta">
+    <a href="#productos" class="btn-primary">Ver Colección</a>
+    <a href="#quienes" class="btn-outline">Nuestra Historia</a>
+  </div>
+  <div class="hero-shoe-display">
+    <img src="/Imagenes/AirMaxPlus.jpg" alt="Víctor Medrano" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+  </div>
+</section>
+
+<!-- ========================= CARRUSEL DE IMÁGENES ========================= -->
+<div class="carousel-section">
+  <div class="carousel-track">
+
+    <!-- ► CARRUSEL IMAGEN 1 — Reemplaza el emoji por: <img src="carrusel1.jpg" alt="Air Max 90"> -->
+    <div class="carousel-item">
+      👟
+      <div class="carousel-item-label">Air Max 90</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 2 — Reemplaza el emoji por: <img src="carrusel2.jpg" alt="Classic Slip-On"> -->
+    <div class="carousel-item">
+      🥿
+      <div class="carousel-item-label">Classic Slip-On</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 3 — Reemplaza el emoji por: <img src="carrusel3.jpg" alt="Street Slides"> -->
+    <div class="carousel-item">
+      🩴
+      <div class="carousel-item-label">Street Slides</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 4 — Reemplaza el emoji por: <img src="carrusel4.jpg" alt="Red Edition"> -->
+    <div class="carousel-item" style="background:#1a0a0a;">
+      🔴
+      <div class="carousel-item-label">Red Edition</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 5 — Reemplaza el emoji por: <img src="carrusel5.jpg" alt="Ultra Boost"> -->
+    <div class="carousel-item">
+      👟
+      <div class="carousel-item-label">Ultra Boost</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 6 — Reemplaza el emoji por: <img src="carrusel6.jpg" alt="Green Force"> -->
+    <div class="carousel-item" style="background:#0a1a0a;">
+      🟢
+      <div class="carousel-item-label">Green Force</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 7 — Reemplaza el emoji por: <img src="carrusel7.jpg" alt="Boot Collection"> -->
+    <div class="carousel-item">
+      🥾
+      <div class="carousel-item-label">Boot Collection</div>
+    </div>
+
+    <!-- ► CARRUSEL IMAGEN 8 — Reemplaza el emoji por: <img src="carrusel8.jpg" alt="Blue Wave"> -->
+    <div class="carousel-item" style="background:#0a0a1a;">
+      🔵
+      <div class="carousel-item-label">Blue Wave</div>
+    </div>
+
+    <!-- DUPLICADOS para el loop infinito — copia exactamente los mismos cambios de arriba -->
+    <div class="carousel-item">👟<div class="carousel-item-label">Air Max 90</div></div>
+    <div class="carousel-item">🥿<div class="carousel-item-label">Classic Slip-On</div></div>
+    <div class="carousel-item">🩴<div class="carousel-item-label">Street Slides</div></div>
+    <div class="carousel-item" style="background:#1a0a0a;">🔴<div class="carousel-item-label">Red Edition</div></div>
+    <div class="carousel-item">👟<div class="carousel-item-label">Ultra Boost</div></div>
+    <div class="carousel-item" style="background:#0a1a0a;">🟢<div class="carousel-item-label">Green Force</div></div>
+    <div class="carousel-item">🥾<div class="carousel-item-label">Boot Collection</div></div>
+    <div class="carousel-item" style="background:#0a0a1a;">🔵<div class="carousel-item-label">Blue Wave</div></div>
+
+  </div>
+</div>
+
+<!-- ========================= QUIÉNES SOMOS ========================= -->
+<section id="quienes">
+  <div class="about-image-wrapper">
+    <div class="about-image-box">
+       <img src="/Imagenes/VictorMedrano.jpg" alt="Víctor Medrano" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="about-frame"></div>
+      <div class="about-image-label">Víctor Medrano — Fundador</div>
+    </div>
+  </div>
+  <div class="about-text">
+    <div class="section-label">Quiénes Somos</div>
+    <h2 class="section-title">NACIDOS<br>PARA EL<br><span class="text-accent">STREET</span></h2>
+    <p>Somos <strong>Prime Kicks</strong>, una tienda especializada en sneakers auténticos y de edición limitada, fundada en Guatemala con la misión de llevar la cultura sneaker a cada rincón del país.</p>
+    <p>Nuestra historia comienza con una simple pasión: los zapatos no son solo moda, son identidad. Desde 2024 hemos curado las mejores colecciones de las marcas más icónicas del mundo.</p>
+    <p>Víctor Manuel Estuardo Medrano Hernández, fundador y director de Prime Kicks, ha dedicado años a comprender la cultura sneaker a nivel global para traer al mercado guatemalteco lo mejor del mundo.</p>
+    <div class="about-stats">
+      <div><div class="stat-num">200+</div><div class="stat-label">Modelos en Stock</div></div>
+      <div><div class="stat-num">15+</div><div class="stat-label">Marcas Premium</div></div>
+      <div><div class="stat-num">1.2K</div><div class="stat-label">Clientes Felices</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= VIDEO ========================= -->
+<div class="video-section">
+  <div class="section-label" style="margin-bottom:1rem;">Nuestra Historia en Video</div>
+  <h2 class="section-title" style="margin-bottom:3rem;">MÁS QUE<br>UN <span class="text-accent">ZAPATO</span></h2>
+  <div class="video-wrapper">
+    <div class="video-placeholder" id="videoPlaceholder">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,52,28,0.1),transparent 60%);"></div>
+      <button class="play-btn" id="playBtn" onclick="toggleVideo()">▶</button>
+      <p style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray);">Ver Video — 35 segundos</p>
+      <video id="storeVideo" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" muted loop>
+        <source src="LebronJames.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= MISIÓN Y VISIÓN ========================= -->
+<section id="mision">
+  <div class="section-label">Identidad Corporativa</div>
+  <h2 class="section-title">MISIÓN &<br><span class="text-accent">VISIÓN</span></h2>
+  <div class="mv-grid">
+    <div class="mv-card">
+      <div class="mv-card-icon">🎯</div>
+      <h3>Nuestra Misión</h3>
+      <p>Proveer a los amantes de los sneakers en Guatemala acceso a calzado auténtico, de alta calidad y edición limitada, ofreciendo una experiencia de compra excepcional que honre la cultura del streetwear. Nos comprometemos a ser el punto de referencia de la moda urbana en Centroamérica, conectando a nuestros clientes con las últimas tendencias y lanzamientos globales.</p>
+    </div>
+    <div class="mv-card">
+      <div class="mv-card-icon">🌟</div>
+      <h3>Nuestra Visión</h3>
+      <p>Para 2030, convertirnos en la tienda de sneakers líder de Centroamérica, reconocida por su exclusividad, autenticidad y profundo respeto por la cultura sneaker. Buscamos expandir nuestra presencia a las principales ciudades de la región, siendo la plataforma favorita donde la moda, el deporte y el arte convergen en un solo par de zapatos.</p>
+    </div>
+  </div>
+  <div class="mv-values">
+    <div class="value-pill"><div class="vi">✅</div><p>Autenticidad</p></div>
+    <div class="value-pill"><div class="vi">🤝</div><p>Confianza</p></div>
+    <div class="value-pill"><div class="vi">🔥</div><p>Pasión</p></div>
+    <div class="value-pill"><div class="vi">🌐</div><p>Innovación</p></div>
+  </div>
+</section>
+
+<!-- ========================= PRODUCTOS ========================= -->
+<section id="productos">
+  <div class="section-label">Catálogo Exclusivo</div>
+  <h2 class="section-title">NUESTROS<br><span class="text-accent">PRODUCTOS</span></h2>
+  <div class="products-filter">
+    <button class="filter-btn active" onclick="filterProducts('todos', this)">Todos</button>
+    <button class="filter-btn" onclick="filterProducts('running', this)">Running</button>
+    <button class="filter-btn" onclick="filterProducts('basketball', this)">Basketball</button>
+    <button class="filter-btn" onclick="filterProducts('casual', this)">Casual</button>
+    <button class="filter-btn" onclick="filterProducts('limited', this)">Edición Limitada</button>
+  </div>
+  <div class="products-grid">
+    <!-- PRODUCTO 1 -->
+    <div class="product-card" data-category="running limited">
+      <div class="product-img">
+          <img src="/Imagenes/producto1-airmax90.jpg" alt="Air Max 90 OG" style="width:80%;height:80%;object-fit:contain;z-index:1;">  
+        <div class="product-img-bg"></div>
+        <div class="product-badge">Limited</div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Nike</div>
+        <div class="product-name">Air Max 90 OG</div>
+        <div><span class="product-price">Q1,850</span><span class="product-price-old">Q2,200</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+    <!-- PRODUCTO 2 -->
+    <div class="product-card" data-category="basketball">
+      <div class="product-img" style="background:#111;">
+          <img src="/Imagenes/producto2-jordan1.png" alt="Air Jordan 1 Retro High" style="width:80%;height:80%;object-fit:contain;z-index:1;">
+        <div class="product-img-bg"></div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Jordan</div>
+        <div class="product-name">Air Jordan 1 Retro High</div>
+        <div><span class="product-price">Q3,200</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+    <!-- PRODUCTO 3 -->
+    <div class="product-card" data-category="running">
+      <div class="product-img" style="background:#0d1a0d;">
+        <img src="/Imagenes/producto3-ultraboost.jpg" alt="Ultra Boost 24" style="width:80%;height:80%;object-fit:contain;z-index:1;">
+        <div class="product-img-bg"></div>
+        <div class="product-badge">New</div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Adidas</div>
+        <div class="product-name">Ultra Boost 24</div>
+        <div><span class="product-price">Q2,450</span><span class="product-price-old">Q2,800</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+    <!-- PRODUCTO 4 -->
+    <div class="product-card" data-category="casual">
+      <div class="product-img" style="background:#1a1a0d;">
+        <img src="/Imagenes/producto4-converse.avif" alt="Chuck Taylor All Star" style="width:80%;height:80%;object-fit:contain;z-index:1;">
+        <div class="product-img-bg"></div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Converse</div>
+        <div class="product-name">Chuck Taylor All Star</div>
+        <div><span class="product-price">Q950</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+    <!-- PRODUCTO 5 -->
+    <div class="product-card" data-category="casual limited">
+      <div class="product-img" style="background:#0d0d1a;">
+        <img src="/Imagenes/producto5-newbalance.webp" alt="990v6 Made in USA" style="width:80%;height:80%;object-fit:contain;z-index:1;">
+        <div class="product-img-bg"></div>
+        <div class="product-badge">Limited</div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">New Balance</div>
+        <div class="product-name">990v6 Made in USA</div>
+        <div><span class="product-price">Q3,800</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+    <!-- PRODUCTO 6 -->
+    <div class="product-card" data-category="running">
+      <div class="product-img" style="background:#1a0d0d;">
+        <img src="Imagenes/producto6-puma.jpg" alt="Suede Classic XXI" style="width:80%;height:80%;object-fit:contain;z-index:1;">
+        <div class="product-img-bg"></div>
+        <div class="product-badge">Hot</div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Puma</div>
+        <div class="product-name">Suede Classic XXI</div>
+        <div><span class="product-price">Q1,200</span><span class="product-price-old">Q1,500</span></div>
+        <button class="product-add">Agregar al Carrito</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- ========================= PROVEEDORES ========================= -->
+<section id="proveedores">
+  <div class="section-label">Nuestros Aliados</div>
+  <h2 class="section-title">NUESTROS<br><span class="text-accent">PROVEEDORES</span></h2>
+  <p style="color:var(--gray);max-width:600px;line-height:1.8;font-size:0.95rem;">Trabajamos directamente con las marcas más reconocidas del mundo, garantizando autenticidad en cada par.</p>
+  <div class="suppliers-grid">
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Nikelogo.png" alt="Nike"></div>
+      <div class="supplier-name">NIKE</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Adidaslogo.png" alt="Adidas"></div>
+      <div class="supplier-name">ADIDAS</div>
+      <div class="supplier-country">🇩🇪 Alemania</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Jordanlogo.png" alt="Jordan"></div>
+      <div class="supplier-name">JORDAN</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Pumalogo.jpg" alt="Puma"></div>
+      <div class="supplier-name">PUMA</div>
+      <div class="supplier-country">🇩🇪 Alemania</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/NewBalancelogo.png" alt="New Balance"></div>
+      <div class="supplier-name">NEW BALANCE</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Converselogo.png" alt="Converse"></div>
+      <div class="supplier-name">CONVERSE</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Vanslogo.png" alt="Vans"></div>
+      <div class="supplier-name">VANS</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/Reebooklogo.png" alt="Reebok"></div>
+      <div class="supplier-name">REEBOK</div>
+      <div class="supplier-country">🇬🇧 Reino Unido</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/UnderArmorlogo.png" alt="Under Armour" /></div>
+      <div class="supplier-name">UNDER ARMOUR</div>
+      <div class="supplier-country">🇺🇸 USA</div>
+    </div>
+    <div class="supplier-card">
+      <div class="supplier-logo"><img src="/Imagenes/ASICSlogo.jpg" alt="Asics" /></div>
+      <div class="supplier-name">ASICS</div>
+      <div class="supplier-country">🇯🇵 Japón</div>
+    </div>
+  </div>
+</section>
+<!-- ========================= CLIENTES ========================= -->
+<section id="clientes">
+  <div class="section-label">Nuestra Comunidad</div>
+  <h2 class="section-title">NUESTROS<br><span class="text-accent">CLIENTES</span></h2>
+  <p class="clients-intro">Más de 1,200 sneakerheads confían en nosotros. Cada cliente es parte de la familia Prime Kicks.</p>
+  <div class="clients-list">
+
+    <!-- ► IMAGEN 18 — FOTO CLIENTE 1: Borra el emoji 🧑 y escribe: <img src="cliente1.jpg" alt="Carlos Pérez"> -->
+    <div class="client-card"><div class="client-avatar">🧑</div><div class="client-info"><div class="client-name">Carlos Alejandro Pérez</div><div class="client-tag">VIP Member</div></div></div>
+
+    <!-- ► IMAGEN 19 — FOTO CLIENTE 2: Borra el emoji 👩 y escribe: <img src="cliente2.jpg" alt="María López"> -->
+    <div class="client-card"><div class="client-avatar">👩</div><div class="client-info"><div class="client-name">María Fernanda López</div><div class="client-tag">Collector</div></div></div>
+
+    <!-- ► IMAGEN 20 — FOTO CLIENTE 3: Borra el emoji 👨 y escribe: <img src="cliente3.jpg" alt="Roberto García"> -->
+    <div class="client-card"><div class="client-avatar">👨</div><div class="client-info"><div class="client-name">Roberto Enrique García</div><div class="client-tag">VIP Member</div></div></div>
+
+    <!-- ► IMAGEN 21 — FOTO CLIENTE 4: Borra el emoji 👧 y escribe: <img src="cliente4.jpg" alt="Sofía Torres"> -->
+    <div class="client-card"><div class="client-avatar">👧</div><div class="client-info"><div class="client-name">Sofía Valentina Torres</div><div class="client-tag">Sneakerhead</div></div></div>
+
+    <!-- ► IMAGEN 22 — FOTO CLIENTE 5: Borra el emoji 🧔 y escribe: <img src="cliente5.jpg" alt="Diego Morales"> -->
+    <div class="client-card"><div class="client-avatar">🧔</div><div class="client-info"><div class="client-name">Diego Andrés Morales</div><div class="client-tag">Collector</div></div></div>
+
+    <!-- ► IMAGEN 23 — FOTO CLIENTE 6: Borra el emoji 👱 y escribe: <img src="cliente6.jpg" alt="Isabella Ruiz"> -->
+    <div class="client-card"><div class="client-avatar">👱</div><div class="client-info"><div class="client-name">Isabella Christine Ruiz</div><div class="client-tag">VIP Member</div></div></div>
+
+    <!-- ► IMAGEN 24 — FOTO CLIENTE 7: Borra el emoji 🧑‍🦱 y escribe: <img src="cliente7.jpg" alt="José Hernández"> -->
+    <div class="client-card"><div class="client-avatar">🧑‍🦱</div><div class="client-info"><div class="client-name">José Antonio Hernández</div><div class="client-tag">Sneakerhead</div></div></div>
+
+    <!-- ► IMAGEN 25 — FOTO CLIENTE 8: Borra el emoji 👩‍🦰 y escribe: <img src="cliente8.jpg" alt="Daniela Castillo"> -->
+    <div class="client-card"><div class="client-avatar">👩‍🦰</div><div class="client-info"><div class="client-name">Daniela Marisol Castillo</div><div class="client-tag">VIP Member</div></div></div>
+
+    <!-- ► IMAGEN 26 — FOTO CLIENTE 9: Borra el emoji 👨‍🦳 y escribe: <img src="cliente9.jpg" alt="Fernando Lima"> -->
+    <div class="client-card"><div class="client-avatar">👨‍🦳</div><div class="client-info"><div class="client-name">Fernando Antonio Lima</div><div class="client-tag">Collector</div></div></div>
+
+    <!-- ► IMAGEN 27 — FOTO CLIENTE 10: Borra el emoji 🧕 y escribe: <img src="cliente10.jpg" alt="Lucía Vásquez"> -->
+    <div class="client-card"><div class="client-avatar">🧕</div><div class="client-info"><div class="client-name">Lucía del Carmen Vásquez</div><div class="client-tag">Sneakerhead</div></div></div>
+
+    <!-- ► IMAGEN 28 — FOTO CLIENTE 11: Borra el emoji 👦 y escribe: <img src="cliente11.jpg" alt="Sebastián Martínez"> -->
+    <div class="client-card"><div class="client-avatar">👦</div><div class="client-info"><div class="client-name">Sebastián Martínez Cruz</div><div class="client-tag">VIP Member</div></div></div>
+
+    <!-- ► IMAGEN 29 — FOTO CLIENTE 12: Borra el emoji 👩‍🦱 y escribe: <img src="cliente12.jpg" alt="Ana Mendoza"> -->
+    <div class="client-card"><div class="client-avatar">👩‍🦱</div><div class="client-info"><div class="client-name">Ana Gabriela Mendoza</div><div class="client-tag">Collector</div></div></div>
+
+  </div>
+</section>
+
+<!-- ========================= CONTACTO ========================= -->
+<section id="contacto">
+  <div class="section-label">Estamos Para Ti</div>
+  <h2 class="section-title">CONTÁC<span class="text-accent">TENOS</span></h2>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-info-item">
+        <div class="contact-icon">📍</div>
+        <div><h4>Ubicación</h4><p>6a Avenida 12-31, Zona 1<br>Ciudad de Guatemala, Guatemala</p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">📞</div>
+        <div><h4>Teléfono</h4><p>+502 3064-2785</p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">✉️</div>
+        <div><h4>Correo Electrónico</h4><p>vmedranoh@miumg.edu.gt</p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">🕐</div>
+        <div><h4>Horario</h4><p>Lun – Vie: 9:00 AM – 7:00 PM<br>Sáb – Dom: 10:00 AM – 5:00 PM</p></div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;">Redes Sociales</div>
+        <div class="social-links">
+          <a href="https://www.instagram.com/marianogalvez/?hl=es" class="social-btn" title="Instagram">📸</a>
+          <a href="https://www.facebook.com/u.marianogalvez/?locale=es_LA" class="social-btn" title="Facebook">📘</a>
+          <a href="#" class="social-btn" title="TikTok">🎵</a>
+          <a href="#" class="social-btn" title="WhatsApp">💬</a>
+          <a href="https://www.youtube.com/@umarianogalvez" class="social-btn" title="YouTube">▶️</a>
+          <a href="#" class="social-btn" title="Twitter/X">🐦</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="map-container">
+      <div class="map-header"><div class="map-dot"></div>Nuestra Ubicación — Guatemala City</div>
+      <div class="map-body">
+        <div>📍</div>
+        <p>6a Av. 12-31, Zona 1, Guatemala</p>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+<!-- ========================= FOOTER ========================= -->
+<footer>
+  <!-- <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#inicio" style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;text-decoration:none;color:var(--white);display:block;margin-bottom:1.5rem;">PRIME<span style="color:var(--accent);">.</span>KICKS</a>
+      <p>La tienda de sneakers más exclusiva de Guatemala. Autenticidad, estilo y cultura urbana en un solo lugar.</p>
+      <div class="social-links">
+        <a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">📘</a>
+        <a href="#" class="social-btn">🎵</a>
+        <a href="#" class="social-btn">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#quienes">Quiénes Somos</a></li>
+        <li><a href="#mision">Misión & Visión</a></li>
+        <li><a href="#productos">Nuestros Productos</a></li>
+        <li><a href="#proveedores">Proveedores</a></li>
+        <li><a href="#clientes">Clientes</a></li>
+        <li><a href="#contacto">Contáctenos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#">Novedades</a></li>
+        <li><a href="#">Más Vendidos</a></li>
+        <li><a href="#">Edición Limitada</a></li>
+        <li><a href="#">Ofertas</a></li>
+        <li><a href="#">Nike</a></li>
+        <li><a href="#">Adidas</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Soporte</h4>
+      <ul>
+        <li><a href="#">Políticas de Envío</a></li>
+        <li><a href="#">Devoluciones</a></li>
+        <li><a href="#">Guía de Tallas</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Términos y Condiciones</a></li>
+      </ul>
+    </div> 
+  </div>--> 
+  <div class="footer-bottom">
+    <div class="footer-lema">
+      <strong>Universidad Mariano Gálvez de Guatemala</strong><br>
+      <span style="font-size:0.65rem;letter-spacing:0.12em;">"Ciencia y Virtud al Servicio de Guatemala"</span>
+    </div>
+    <div class="footer-copy">
+      © 2026 Prime Kicks. Víctor Manuel Estuardo Medrano Hernández — Carnet 0900-26-25761<br>
+      <span style="font-size:0.65rem;">Universidad Mariano Gálvez de Guatemala · UMG</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================= REPRODUCTOR DE MÚSICA ========================= -->
+<div class="music-player">
+  <button class="music-btn" id="musicToggle" onclick="toggleMusic()">▶</button>
+  <div class="music-info">
+    <div class="music-title">Chillout By Victor Medrano</div>
+    <div class="music-status" id="musicStatus">Haz clic para reproducir</div>
+  </div>
+  <div class="music-bars">
+    <div class="music-bar paused" id="bar1"></div>
+    <div class="music-bar paused" id="bar2"></div>
+    <div class="music-bar paused" id="bar3"></div>
+    <div class="music-bar paused" id="bar4"></div>
+  </div>
+</div>
+<audio id="bgMusic" loop>
+  <source src="Chillout.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('follower');
+  let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px'; });
+  setInterval(() => { followerX += (mouseX - followerX) * 0.15; followerY += (mouseY - followerY) * 0.15; follower.style.left = followerX + 'px'; follower.style.top = followerY + 'px'; }, 16);
+
+  const scrollBar = document.getElementById('scrollBar');
+  window.addEventListener('scroll', () => { const h = document.documentElement; scrollBar.style.width = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100 + '%'; });
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) { navLinks.forEach(l => l.classList.remove('active')); const a = document.querySelector(`.nav-link[href="#${entry.target.id}"]`); if (a) a.classList.add('active'); } });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => { card.style.display = (cat === 'todos' || (card.dataset.category || '').includes(cat)) ? 'block' : 'none'; });
+  }
+
+  function toggleVideo() {
+    const video = document.getElementById('storeVideo');
+    const btn = document.getElementById('playBtn');
+    if (video.paused || video.ended) { video.style.display = 'block'; video.play(); btn.textContent = '⏸'; btn.style.background = '#333'; }
+    else { video.pause(); btn.textContent = '▶'; btn.style.background = 'var(--accent)'; }
+  }
+
+  let musicPlaying = false;
+  function toggleMusic() {
+    const audio = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicToggle');
+    const status = document.getElementById('musicStatus');
+    const bars = document.querySelectorAll('.music-bar');
+    musicPlaying = !musicPlaying;
+    if (musicPlaying) { audio.volume = 0.15; audio.play().catch(() => {}); btn.textContent = '⏸'; status.textContent = 'Reproduciendo...'; bars.forEach(b => b.classList.remove('paused')); }
+    else { audio.pause(); btn.textContent = '▶'; status.textContent = 'En pausa'; bars.forEach(b => b.classList.add('paused')); }
+  }
+
+  const revealObserver = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.product-card, .mv-card, .client-card, .supplier-card, .value-pill').forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(30px)'; el.style.transition = 'opacity 0.6s ease, transform 0.6s ease'; revealObserver.observe(el); });
+
+  document.querySelectorAll('.product-add').forEach(btn => {
+    btn.addEventListener('click', function() { const orig = this.textContent; this.textContent = '✓ Agregado'; this.style.background = '#2a7a2a'; this.style.borderColor = '#2a7a2a'; setTimeout(() => { this.textContent = orig; this.style.background = ''; this.style.borderColor = ''; }, 2000); });
+  });
+</script>
+</body>
+</html>
